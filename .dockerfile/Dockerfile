@@ -7,6 +7,8 @@
 
 # FROM ocaml/opam:ubuntu - latest doesn't work due to problems with ppx_deriving deps
 # 17.04 doesn't work due to missing archives at ubuntu? or stale packages info?
+
+# FIXME following is a bit worrysome since it doesn't update from the web opam repo https://github.com/ocaml-attic/opam-dockerfiles/blob/ubuntu-16.04_ocaml-4.04.2/Dockerfile
 FROM ocaml/opam:ubuntu-16.04_ocaml-4.04.2
 # RUN apt-get -y update
 
