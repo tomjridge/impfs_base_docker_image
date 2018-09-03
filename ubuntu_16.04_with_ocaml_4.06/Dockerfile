@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 
-# ubuntu extra packages ------------------------------------------------
+# ubuntu extra packages for ocaml build --------------------------------
 
 RUN apt-get -y update
 RUN apt-get install -y git make
@@ -24,6 +24,7 @@ LABEL distro_style="apt" distro="ubuntu" distro_long="ubuntu-16.04" arch="x86_64
 RUN apt-get -y update && \
   DEBIAN_FRONTEND=noninteractive apt-get -y upgrade && \
   DEBIAN_FRONTEND=noninteractive apt-get -y install aspcud && \
+  DEBIAN_FRONTEND=noninteractive apt-get -y install opam && \
   mkdir -p /etc/sudoers.d && \
   echo 'opam ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/opam && \
   chmod 440 /etc/sudoers.d/opam && \
@@ -34,7 +35,7 @@ RUN apt-get -y update && \
 USER opam
 ENV HOME /home/opam
 WORKDIR /home/opam
-RUN wget https://raw.github.com/ocaml/opam/master/shell/opam_installer.sh -O - | sh -s /usr/local/bin
+
 
 # NOTE tag cef3d38 is just a reasonably recent (4 weeks ago) 
 RUN mkdir .ssh && \
@@ -49,3 +50,10 @@ CMD [ "bash" ]
 
 # end section ----------------------------------------------------------
 
+
+
+# more useful ubuntu packages ------------------------------------------
+
+USER root
+RUN apt-get install -y time
+USER opam
