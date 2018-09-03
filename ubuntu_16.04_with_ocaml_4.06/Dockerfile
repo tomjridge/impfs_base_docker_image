@@ -42,7 +42,7 @@ RUN mkdir .ssh && \
   git config --global user.email "docker@example.com" && \
   git config --global user.name "Docker CI" && \
   sudo -u opam sh -c "git clone git://github.com/ocaml/opam-repository && cd opam-repository && git reset --hard cef3d38" && \
-  sudo -u opam sh -c "opam init -a -y --compiler 4.04.2 /home/opam/opam-repository" && \
+  sudo -u opam sh -c "opam init -a -y --compiler 4.06.1 /home/opam/opam-repository" && \
   sudo -u opam sh -c "opam install -y depext travis-opam"
 ENTRYPOINT [ "opam", "config", "exec", "--" ]
 CMD [ "bash" ]
