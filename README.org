@@ -1,0 +1,30 @@
+
+| Component                  | Stability | Note                                                                 |
+| ubuntu base image          | +++++     |                                                                      |
+| ubuntu extra packages      | +++++     | necessary for installing opam/ocaml eg make, git etc                 |
+| opam                       | ++++      | stable, except for big changes eg 1.2.2 -> 2.0                       |
+| opam package repo          | +         | changes all the time                                                 |
+| ocaml version              | +++++     | expected to be under our control                                     |
+| opam packages for our libs | +++       | fairly stable, providing we accurately specify deps for our packages |
+|                            |           |                                                                      |
+
+
+Notes
+
+- opam package repo changes all the time; makes sense to pick a
+  particular version of this to introduce some stability; but we need
+  to keep reasonably upto date with master
+- ocaml version: we typically pick a particular reasonably-recent
+  version eg 4.04.x or 4.06.x; as such, this is stable
+- opam packages for our libs: should be reasonably stable, but when
+  opam package repo is refactored we may discover missing dependencies
+  etc
+
+
+Plan
+
+- work from a local mirror of opam package repo, pinned to some
+  particular commit (reasonably recent)
+- specify deps for our packages clearly, with comments about why we
+  depend on a particular package; deps should use opam package names,
+  but be aware that these may differ from ocamlfind libs :(

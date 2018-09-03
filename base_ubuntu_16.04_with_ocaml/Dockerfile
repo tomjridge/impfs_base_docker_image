@@ -1,5 +1,7 @@
 FROM ubuntu:16.04
 
+# ubuntu extra packages ------------------------------------------------
+
 RUN apt-get -y update
 RUN apt-get install -y git make
 RUN apt-get install -y curl
@@ -17,6 +19,7 @@ RUN apt-get install -y unzip m4
 
 
 # taken from https://github.com/ocaml-attic/opam-dockerfiles/blob/ubuntu-16.04_ocaml-4.04.2/Dockerfile
+
 LABEL distro_style="apt" distro="ubuntu" distro_long="ubuntu-16.04" arch="x86_64" ocaml_version="4.04.2" opam_version="1.2" operatingsystem="linux"
 RUN apt-get -y update && \
   DEBIAN_FRONTEND=noninteractive apt-get -y upgrade && \
@@ -32,11 +35,13 @@ USER opam
 ENV HOME /home/opam
 WORKDIR /home/opam
 RUN wget https://raw.github.com/ocaml/opam/master/shell/opam_installer.sh -O - | sh -s /usr/local/bin
+
+# NOTE tag cef3d38 is just a reasonably recent (4 weeks ago) 
 RUN mkdir .ssh && \
   chmod 700 .ssh && \
   git config --global user.email "docker@example.com" && \
   git config --global user.name "Docker CI" && \
-  sudo -u opam sh -c "git clone -b master git://github.com/ocaml/opam-repository" && \
+  sudo -u opam sh -c "git clone git://github.com/ocaml/opam-repository && cd opam-repository && git reset --hard cef3d38" && \
   sudo -u opam sh -c "opam init -a -y --comp 4.04.2 /home/opam/opam-repository" && \
   sudo -u opam sh -c "opam install -y depext travis-opam"
 ENTRYPOINT [ "opam", "config", "exec", "--" ]
