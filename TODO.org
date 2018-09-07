@@ -1,0 +1,6 @@
+- think about how to make docker builds quicker eg use ocaml and opam
+  from nix to avoid opam switch
+  - we can generate the opam install of opam packages locally
+  - ditto for the ocaml executable; we can just tar the whole .opam
+    directory after impfs_base_docker_image
+    - this is about 400M, which is quite hefty
