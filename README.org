@@ -28,3 +28,25 @@ Plan
 - specify deps for our packages clearly, with comments about why we
   depend on a particular package; deps should use opam package names,
   but be aware that these may differ from ocamlfind libs :(
+
+
+* Building imp_fs packages
+
+- we typically just build imp_fs (or some public package late in the build)
+- for core libraries we may have additional dockerfiles
+
+tr61@pc1156:/tmp/l/git/github$ ls -1 */.dockerfile/Dockerfile
+a_tjr_lib/.dockerfile/Dockerfile
+c_tjr_btree/.dockerfile/Dockerfile
+d_tjr_pcache/.dockerfile/Dockerfile  <-- public, latest in build
+imp_fs/.dockerfile/Dockerfile
+impfs_base_docker_image/.dockerfile/Dockerfile
+
+
+- given the above, we expect tjr_lib and btree to be prefixes of
+  pcache
+- FIXME is there anyway to avoid the replication? we could have a
+  single dockerfile for pcache in this directory, and reference this
+  from tjr_lib etc, which suffices to check tjr_lib build
+  - but duplication is not really that much provided package
+    dependencies remain stable

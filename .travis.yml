@@ -3,7 +3,8 @@ services:
   - docker
 
 script:
-  - make -C .dockerfile
+  - make -C ubuntu_16.04_with_ocaml_4.06
+  - make -C impfs_base_docker_image
 
 after_script:
   - docker images
