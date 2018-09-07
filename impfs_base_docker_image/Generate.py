@@ -26,8 +26,20 @@ imp_deps={
 }
 
 has_dev_branch=['tjr_btree', 'mini-fs']
+
+
+# dockerfiles ----------------------------------------------------------
+
 has_dockerfile=['tjr_lib','tjr_btree','tjr_pcache']
 
+
+# travis ---------------------------------------------------------------
+
+travis="""
+a_tjr_lib/.travis.yml
+c_tjr_btree/.travis.yml
+d_tjr_pcache/.travis.yml
+"""
 
 # project paths --------------------------------------------------------
 
