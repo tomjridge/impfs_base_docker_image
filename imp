@@ -1,0 +1,54 @@
+#!/usr/bin/python3
+# -*- python -*-
+"""Usage:
+  imp pin (--local | --github)
+  imp unpin
+  imp install
+  imp uninstall
+
+The commands are:
+    pin      Pin repositories to local or github
+    unpin    Unpin imp opam repositories
+    install  Install tjr_btree (and ancestors)
+    uninstall  Uninstall tjr_btree (and ancestors)
+
+"""
+from docopt import docopt
+import subprocess
+import os
+
+pinnable_repos=['tjr_lib','isa_btree', 'tjr_monad', 'tjr_fs_shared', 'tjr_btree']
+
+
+def unpin():
+    cmd=['opam', 'pin', '-y', 'remove']+pinnable_repos
+    subprocess.run(cmd)
+
+
+def pin(args):
+    if args['--local']:
+        repos=['a_tjr_lib','b_isa_btree','b_tjr_fs_shared','b_tjr_monad','c_tjr_btree']
+        for f in repos:
+                subprocess.run(['opam','pin','-y','add','-n','/tmp/l/github/'+f])
+    elif args['--github']:
+        print("FIXME")
+    else:
+        print("pin: unrecognized arguments")
+
+
+def install():
+    cmd=['opam','install']+pinnable_repos
+    subprocess.run(cmd)
+
+
+def uninstall():
+    cmd=['opam', 'remove', '-y']+pinnable_repos
+    subprocess.run(cmd)
+    
+
+if __name__ == '__main__':
+    args=docopt(__doc__)
+    if args['unpin']: unpin()
+    elif args['pin']: pin(args)
+    elif args['install']: install()
+    elif args['uninstall']: uninstall()
