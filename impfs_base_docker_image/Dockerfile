@@ -4,4 +4,4 @@ RUN opam list
 RUN ocamlfind list
 RUN sudo apt-get -y install libfuse-dev
 
-RUN opam install num ocamlfuse extlib extunix bos omd yojson ppx_bin_prot ocamlfind core ppx_deriving_yojson lwt fileutils dune
+RUN opam install bos core dune extlib extunix fileutils lwt num ocamlfind ocamlfuse omd ppx_bin_prot ppx_deriving_yojson yojson
