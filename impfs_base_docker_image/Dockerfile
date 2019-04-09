@@ -1,4 +1,4 @@
-FROM ubuntu_18.04_with_opam2_ocaml_4.06
+FROM ubuntu_18.04_with_ocaml_4.07.1
 
 RUN opam list
 RUN sudo apt-get -y install libfuse-dev
