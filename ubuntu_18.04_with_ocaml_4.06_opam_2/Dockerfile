@@ -17,11 +17,8 @@ RUN apt-get install -y rsync bubblewrap
 # from https://github.com/avsm/opam2-ppa/blob/master/scripts/Dockerfile.base ; needed?
 # RUN apt-get -y install build-essential ocaml-native-compilers devscripts dh-make
 
-# begin section --------------------------------------------------------
 
-#  git clone -b 1.2 git://github.com/ocaml/opam /tmp/opam && \
-#  sh -c "cd /tmp/opam && make cold && make install && echo Not installing OPAM2 wrappers && rm -rf /tmp/opam" && \
-
+# setup opam user --------------------------------------------------------
 
 # taken from https://github.com/ocaml-attic/opam-dockerfiles/blob/ubuntu-16.04_ocaml-4.04.2/Dockerfile
 
@@ -40,34 +37,37 @@ USER opam
 ENV HOME /home/opam
 WORKDIR /home/opam
 
-
-# tjr: install opam from web not apt -----------------------------------
-
-# #   DEBIAN_FRONTEND=noninteractive apt-get -y install opam && 
-# RUN curl -sL https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh > install.sh
-# RUN chmod u+x install.sh
-# RUN ./install.sh -y
-
-RUN curl https://www.cs.le.ac.uk/people/tr61/opam-2.0.1-x86_64-linux  >opam
-RUN chmod u+x ./opam
-RUN sudo mv ./opam /bin
-
-# RUN opam init -a --disable-sandboxing --compiler=4.06.1
-# RUN ./opam switch create 4.06.1
-RUN sudo echo $PATH
-
-# NOTE tag 2f780f7 is just a reasonably recent (today!) 
 RUN mkdir .ssh && \
   chmod 700 .ssh && \
   git config --global user.email "docker@example.com" && \
-  git config --global user.name "Docker CI" && \
-  sudo -u opam sh -c "git clone git://github.com/ocaml/opam-repository && cd opam-repository && git reset --hard 2f780f7" && \
-  sudo -u opam sh -c "opam init -a --disable-sandboxing -y --compiler 4.06.1 /home/opam/opam-repository" && \
-  sudo -u opam sh -c "opam install -y depext travis-opam"
-RUN opam install ocamlfind
+  git config --global user.name "Docker CI" 
 
-# end section ----------------------------------------------------------
 
+# opam repository ------------------------------------------------------
+
+# NOTE tag faebdfd is just a reasonably recent (today!) 
+RUN \
+  git clone git://github.com/ocaml/opam-repository && \
+  cd opam-repository && \
+  git reset --hard faebdfd
+
+
+# opam exe from web not apt -----------------------------------------------
+
+# NOTE the github download link is redirected; so just place in my web
+# directory and download from there
+
+RUN curl https://www.cs.le.ac.uk/people/tr61/opam-2.0.3-x86_64-linux >opam
+RUN chmod u+x ./opam
+RUN ./opam --help
+RUN sudo mv ./opam /bin
+
+
+RUN \
+  opam init -a --disable-sandboxing -y --compiler 4.06.1 /home/opam/opam-repository && \
+  opam install -y depext travis-opam
+
+RUN opam install ocamlfind dune
 
 # some bash setup ------------------------------------------------------
 
@@ -76,7 +76,7 @@ RUN echo "test -r /home/opam/.opam/opam-init/init.sh && . /home/opam/.opam/opam-
 RUN bash -i -c "ocamlfind list"
 
 
-# end ------------------------------------------------------------------
-
 ENTRYPOINT [ "opam", "config", "exec", "--" ]
 CMD [ "bash" ]
+
+
